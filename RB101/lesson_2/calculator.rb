@@ -21,12 +21,12 @@ end
 
 prompt("Welcom to Calculator! Enter your name:")
 name = ''
-loop do 
+loop do
   name = gets().chomp()
 
   if name.empty?()
     prompt("Make sure to use a valid name.")
-  else 
+  else
     break
   end
 end
@@ -35,7 +35,7 @@ prompt("Hi #{name}!")
 
 loop do
   number1 = ''
-  loop do 
+  loop do
     prompt("What's the first number?")
     number1 = gets().chomp()
 
@@ -43,11 +43,11 @@ loop do
       break
     else
       prompt("Hmm... that doesn't look like valid number")
-    end 
+    end
   end
 
   number2 = ''
-  loop do 
+  loop do
     prompt("What's the second number?")
     number2 = gets().chomp()
 
@@ -55,7 +55,7 @@ loop do
       break
     else
       prompt("Hmm... that doesn't look like valid number")
-    end 
+    end
   end
 
   operator_prompt = <<-MSG
@@ -69,7 +69,7 @@ loop do
   prompt(operator_prompt)
 
   operator = ''
-  loop do 
+  loop do
     operator = gets().chomp()
     if %w(1 2 3 4).include?(operator)
       break
@@ -81,22 +81,21 @@ loop do
   prompt("#{operation_to_message(operator)} the two numbers...")
 
   result = case operator
-          when '1'
-            number1.to_i() + number2.to_i()
-          when '2'
-            number1.to_i() - number2.to_i()
-          when '3'
-            number1.to_i() * number2.to_i()
-          when '4'
-            number1.to_i() / number2.to_i()
-  end
+           when '1'
+             number1.to_i() + number2.to_i()
+           when '2'
+             number1.to_i() - number2.to_i()
+           when '3'
+             number1.to_i() * number2.to_i()
+           when '4'
+             number1.to_i() / number2.to_i()
+           end
 
   prompt("The result is #{result}")
 
   prompt("Do you want to perform another claculation? (Y to calculate again)")
   answer = gets().chomp()
   break unless answer.downcase.start_with?('y')
-
-end 
+end
 
 prompt("Thank you for using the calculator. Good bye!")
