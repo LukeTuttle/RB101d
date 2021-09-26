@@ -1,0 +1,4 @@
+# EASY 1
+remember that using the ternary operator '?' isn't necessary if you're just returning true or false anyway. 
+String#chars() returns array of string characters. 
+someobject.map(&:some_method) is short hand for someobject.map { |x| x.some_method}
