@@ -2,3 +2,17 @@
 remember that using the ternary operator '?' isn't necessary if you're just returning true or false anyway. 
 String#chars() returns array of string characters. 
 someobject.map(&:some_method) is short hand for someobject.map { |x| x.some_method}
+PEDAC (note: you dont need to follow these in order, its just meant to help think about problem at different levels of abstraction and make it more chunked)
+P Process the problem (understand the problem)
+  identify expected input and output
+  make the requirements explicit
+  idenfity rules
+  mental model of the problem (optional)
+E Examples/Test Cases 
+  validate understanding of the problem
+D Data Structure
+  how we represent data that we will work with when convertint the input to output
+A Algorithm
+  steps for converting input to output
+C Code
+  implementation of Algorithm
