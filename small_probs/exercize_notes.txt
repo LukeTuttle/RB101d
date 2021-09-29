@@ -21,3 +21,7 @@ C Code
 in the Random#rand method it will output a number bewtween a min and max when supplied a range object
 Enumerator#inject is a useful function which comes with an accumulator object 'memo'. alias: 'reduce'
 
+send and public_send are methods that kind of work like do.call in R (very useful)
+
+# EASY 3 
+IMPORTANT*** I dont undestand how the counting method for String#count works. I've read the docs and stil don't get it. 
