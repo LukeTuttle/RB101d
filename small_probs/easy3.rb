@@ -108,39 +108,47 @@ puts xor(true, false)
 
 
 prob_sep(7)
-# 
+# 7 'odd lists'
+# Reqs: 
+# Algorithm:
+
+def oddities(arr)
+  out = []
+  arr.each_index { |i| out.push(arr[i]) if (i+1).odd? }
+  out
+end
+
+puts oddities([2, 3, 4, 5, 6]) == [2, 4, 6]
+puts oddities([1, 2, 3, 4, 5, 6]) == [1, 3, 5]
+puts oddities(['abc', 'def']) == ['abc']
+puts oddities([123]) == [123]
+puts oddities([]) == []
+
+prob_sep(8)
+# 'Palindromic strings'
 # Reqs: 
 # Algorithm:
 #   -
 
-prob_sep()
+
+prob_sep(9)
+# 9 Palindromic string (part 2)
+# Reqs:
+# Algorithm:
+
+prob_sep(10)
 # 10
-# Reqs: 
+# Reqs:
 # Algorithm:
 #   -
 
-prob_sep()
-# 10
-# Reqs: 
-# Algorithm:
-#   -
+def palindromic_number?(int)
+  int.to_s.reverse == int.to_s
+end
 
+puts palindromic_number?(34543) == true
+puts palindromic_number?(123210) == false
+puts palindromic_number?(22) == true
+puts palindromic_number?(5) == true
 
-prob_sep()
-# 10
-# Reqs: 
-# Algorithm:
-#   -
-
-prob_sep()
-# 10
-# Reqs: 
-# Algorithm:
-#   -
-
-
-
-
-
-
-
+puts "----END----"
