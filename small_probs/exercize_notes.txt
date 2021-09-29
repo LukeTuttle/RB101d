@@ -16,3 +16,8 @@ A Algorithm
   steps for converting input to output
 C Code
   implementation of Algorithm
+
+# EASY 2 
+in the Random#rand method it will output a number bewtween a min and max when supplied a range object
+Enumerator#inject is a useful function which comes with an accumulator object 'memo'. alias: 'reduce'
+
