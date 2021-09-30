@@ -269,3 +269,47 @@ end
 puts string_to_integer('4321') == 4321
 puts string_to_integer('570') == 570
 puts string_to_integer('1') == 1
+
+prob_sep(8)
+# 8 'Convert a String to a Signed Number!'
+def string_to_signed_integer(string)
+  integer = string_to_integer(string.delete('+-'))
+  if string[0] == '-'
+    integer * -1
+  else
+    integer
+  end
+end
+
+puts string_to_signed_integer('4321') == 4321
+puts string_to_signed_integer('-570') == -570
+puts string_to_signed_integer('+100') == 100
+
+prob_sep(9)
+# 9 'Convert a Number to a String!'
+def integer_to_string(num)
+  digits_ = {
+    0 => '0', 1 => '1', 2 => '2', 3 => '3', 4 => '4',
+    5 => '5', 6 => '6', 7 => '7', 8 => '8', 9 => '9'
+  }
+  digit_arr = num.digits.map { |digit| digits_[digit] }
+  digit_arr.reverse.inject(:+)
+end
+
+puts integer_to_string(345).inspect
+puts integer_to_string(4321) == '4321'
+puts integer_to_string(0) == '0'
+puts integer_to_string(5000) == '5000'
+
+prob_sep(10)
+# 10 'Conver a Signed Number to a String!'
+
+def signed_integer_to_string(number)
+  sign = number < 0 ? '-' : '+'
+  sign = '' if number == 0  
+  integer_to_string(number.magnitude).prepend(sign)
+end
+
+puts signed_integer_to_string(4321) == '+4321'
+puts signed_integer_to_string(-123) == '-123'
+puts signed_integer_to_string(0) == '0'
