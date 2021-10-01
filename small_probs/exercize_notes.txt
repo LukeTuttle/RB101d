@@ -25,3 +25,25 @@ send and public_send are methods that kind of work like do.call in R (very usefu
 
 # EASY 3 
 IMPORTANT*** I dont undestand how the counting method for String#count works. I've read the docs and stil don't get it. 
+
+# EASY 4
+problem 5 'Multiples of 3 and 5' ---I struggled with this one
+  if searching for multiples of a number within a range use something like the example below.
+    the important thing to remember is to use an iterator which takes care of not going past the max value on its own like Enumerator#upto
+  ex: (finds multiples of 3 or 5 given a max value and sums all multiples together)
+  def multisum(int)
+    (1..int).select { |x| x % 3 == 0 || x % 5 == 0 }.sum
+  end  
+
+problem 7 'Convert a string to a number'
+  A good way to create an integer from an array of digits is to multiply the previous integer by 10 then add current integer.
+  This shifts the digit place to the left each time 
+  ex code: 
+    value = 0
+    digits.each { |digit| value = 10 * value + digit }
+    value 
+  ex output (takes array [4,3,1]): 
+    10 * 0 + 4 -> 4
+    10 * 4 + 3 -> 43
+    10 * 43 + 1 -> 431
+    
