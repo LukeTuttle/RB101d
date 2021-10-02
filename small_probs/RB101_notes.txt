@@ -1,4 +1,6 @@
-# EASY 1
+RB 101 NOTES
+# Small problem set
+## EASY 1
 remember that using the ternary operator '?' isn't necessary if you're just returning true or false anyway. 
 String#chars() returns array of string characters. 
 someobject.map(&:some_method) is short hand for someobject.map { |x| x.some_method}
@@ -17,7 +19,7 @@ A Algorithm
 C Code
   implementation of Algorithm
 
-# EASY 2 
+## EASY 2 
 in the Random#rand method it will output a number bewtween a min and max when supplied a range object
 Enumerator#inject is a useful function which comes with an accumulator object 'memo'. alias: 'reduce'
 
@@ -26,7 +28,7 @@ send and public_send are methods that kind of work like do.call in R (very usefu
 # EASY 3 
 IMPORTANT*** I dont undestand how the counting method for String#count works. I've read the docs and stil don't get it. 
 
-# EASY 4
+## EASY 4
 problem 5 'Multiples of 3 and 5' ---I struggled with this one
   if searching for multiples of a number within a range use something like the example below.
     the important thing to remember is to use an iterator which takes care of not going past the max value on its own like Enumerator#upto
@@ -46,4 +48,24 @@ problem 7 'Convert a string to a number'
     10 * 0 + 4 -> 4
     10 * 4 + 3 -> 43
     10 * 43 + 1 -> 431
-    
+
+
+
+# Lesson 3
+## Practice Problems: Medium2 
+  - Q's 1 & 2: I dont understand these problems. I feel like I have a decent grasp
+on the pass by value or pass by reference thing but probably not as good as I could. 
+
+## Practice Problems: Hard1 
+  - Q1: if an uninitialized variable is called, ruby will usually throw an exception. 
+        However, when you initialize a local variable within an if block, even if
+        that if block doesn’t get executed, the local variable is initialized to nil
+
+  - Q2: the method 'clone' will create a copy of an object with the same value. 
+        This is helpful if you want to copy an objects value without modifying the object itself later on. 
+        If this doens't make sense then just read the exercize on LS site. 
+
+
+
+# Items for Extra Practice
+  - Small Problems:Easy 5:#2 'After Midnight(Part1):Further Exploration #3
