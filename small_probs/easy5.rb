@@ -168,7 +168,125 @@ puts before_midnight('24:00') == 0
 prob_sep 4
 # 4 'Letter Swap'
 # Requirements:
+# - write method which takes a str of word sep'd by spaces and returns
+#   a str in which the first and last letters of every word are swapped
+# - can assume each word cntns 1+ lttrs and always only words and spaces
+# Mental model:
+# - split str by ' '. Then iteratively swaps first and last letter (subroutine or bloc)
+# - loop through the elements joining them by ' ' into a single string (maybe join() ?)
+# Algorithm:
+# - sstr.split(' ')
 # - 
+# - 
+# - 
+# - 
+
+def swap(str)
+  str_arr = str.split
+  swpd_arr = str_arr.map do |elmnt|
+    elmnt_chars = elmnt.chars
+    first = elmnt_chars.shift
+    last = elmnt_chars.pop
+    elmnt_chars.prepend(last).push(first).join
+  end
+
+  swpd_arr.join(' ')
+end
+
+puts swap('Oh what a wonderful day it is') == 'hO thaw a londerfuw yad ti si'
+puts swap('Abcde') == 'ebcdA'
+puts swap('a') == 'a'
+
+prob_sep 5
+# 5 'Clean up the words'
+# Requirements:
+# - give an string, replace any non alphabetic character
+#     with a single space even if char appears 2+ times in a row
+# Mental model:
+# - use a string method to replace any target chars usin a regex
+# Algorithm:
+# - 
+# - 
+# - 
+# - 
+# - 
+
+# NOTE: I never got this to work before looking at the solution
+# def cleanup(str, regex = /[^[[:alpha:]]]+/)
+#   str = str
+#   while str.match?(regex)
+#     str = str.sub(regex, ' ')
+#   end
+#   str
+# end
+
+# LS Solution(s): 
+# ALPHABET = ('a'..'z').to_a
+
+# def cleanup(text)
+#   clean_chars = []
+
+#   text.chars.each do |char|
+#     if ALPHABET.include?(char)
+#       clean_chars << char
+#     else
+#       clean_chars << ' ' unless clean_chars.last == ' '
+#     end
+#   end
+
+#   clean_chars.join
+# end
+
+# def cleanup(text)
+#   text.gsub(/[^a-z]/, ' ').squeeze(' ')
+# end
+
+# puts cleanup("---what's my +*& line?")
+# puts cleanup("---what's my +*& line?") == ' what s my line '
+
+
+prob_sep 6
+# 6 'Letter counter (Part 1)'
+# Requirements:
+# - write a method that take string with one or more space seperated
+#     words and returns a hash showing the number of wrds of diff sizes
+# Mental model:
+# - create an empty hash
+# - split the string into words by ' '. iterate through the word array
+#     counting the length of each element.
+# - check the hash to see if that length (as key) exists in the hash
+#     - if TRUE then increment the key's value by one
+#     - if FALSE then create the key with a value of 1
+# - return the hash
+
+# Note: the block for Enum#each() below could be replaced with:
+#               sizes[elmnt.length] += 1
+#       this would replace the need for the ellen variable as well
+#       but you would need to initlz the hash as Hash.new(0) (see prob for expln)
+def word_sizes(str)
+  sizes = {}
+  str.split.each do |elmnt|
+    ellen = elmnt.length
+    if sizes.has_key?(ellen)
+      sizes[ellen] += 1
+    else
+      sizes[ellen] = 1
+    end
+  end
+  sizes
+end
+
+puts word_sizes('Four score and seven.') == { 3 => 1, 4 => 1, 5 => 1, 6 => 1 }
+puts word_sizes('Hey diddle diddle, the cat and the fiddle!') == { 3 => 5, 6 => 1, 7 => 2 }
+puts word_sizes("What's up doc?") == { 6 => 1, 2 => 1, 4 => 1 }
+puts word_sizes('') == {}
+
+
+prob_sep 7
+# 7 'Letter Counter (Part 2)'
+# Requirements:
+# - modify word_sizes method from above to exlude non-letters when 
+#     determining word size (ex: it's would have length = 3 not 4)
 # Mental model:
 # - 
 # Algorithm:
@@ -177,3 +295,57 @@ prob_sep 4
 # - 
 # - 
 # - 
+
+def word_sizes(words_string)
+  counts = Hash.new(0)
+  words_string.split.each do |word|
+    word.delete!("^A-Za-z")
+    counts[word.size] += 1
+  end
+  counts
+end
+
+puts word_sizes('Four score and seven.') == { 3 => 1, 4 => 1, 5 => 2 }
+puts word_sizes('Hey diddle diddle, the cat and the fiddle!') == { 3 => 5, 6 => 3 }
+puts word_sizes("What's up doc?") == { 5 => 1, 2 => 1, 3 => 1 }
+puts word_sizes('') == {}
+
+prob_sep 8
+# 8 'Alphabetic Numbers'
+# Requirements:
+# - write a method that takes an Array of Integers between 0-19, and returns
+#     Array of those integers based on the alphabetical order of their english form
+# Mental model:
+# - create a hash with the spellins as values. then iteratively assign those
+#     values to an array. Next, SUBROUTINE sort the array by alphabetical order.
+#  Finally, replace the str values in the sorted array with their keys from the hash
+# Algorithm:
+# - initialize a hash with integer-spelling (key, value) mapping
+# - spellings = fetch_values(*arr_param)
+# - sort spellings
+# - iteratively replace the strings with the key they correspond to (maybe each_key() in a bloc)
+#    - fetch the key wit hthe curerent elemtns value and return it
+
+MY_SPELL = "zero, one, two, three, four, five, six, seven, eight, \
+nine, ten, eleven, twelve, thirteen, fourteen, fifteen, \
+sixteen, seventeen, eighteen, nineteen".split(", ") # \'s espace return character
+
+
+def alphabetic_number_sort(arr)
+  integers_arr = (0..19).to_a
+  spell_mappings = integers_arr.zip(MY_SPELL).to_h # this creates the hash 
+
+  sorted_spellings = spell_mappings.fetch_values(*arr).sort
+  integers_out = sorted_spellings.map do |word|
+    spell_mappings.invert.fetch(word)
+  end
+  integers_out
+end
+
+test_arr = [(0..5), (10..19), (6..9)].map(&:to_a).flatten
+puts alphabetic_number_sort(test_arr)
+
+puts alphabetic_number_sort((0..19).to_a) == [
+  8, 18, 11, 15, 5, 4, 14, 9, 19, 1, 7, 17,
+  6, 16, 10, 13, 3, 12, 2, 0
+]

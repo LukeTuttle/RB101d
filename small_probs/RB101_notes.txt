@@ -25,7 +25,7 @@ Enumerator#inject is a useful function which comes with an accumulator object 'm
 
 send and public_send are methods that kind of work like do.call in R (very useful)
 
-# EASY 3 
+## EASY 3 
 IMPORTANT*** I dont undestand how the counting method for String#count works. I've read the docs and stil don't get it. 
 
 ## EASY 4
@@ -49,6 +49,13 @@ problem 7 'Convert a string to a number'
     10 * 4 + 3 -> 43
     10 * 43 + 1 -> 431
 
+## EASY 5
+problem 8 'Alphabetical Numbers'
+  ENUM$SORT_BY() (cap'd for emphasis): 
+    the method sort_by maps the elements to a set of keys and orders them according 
+    to the order resulting from sorting the keys. The key for each element is generated
+    from the return value of having passed the element through the block. 
+
 
 
 # Lesson 3
@@ -69,3 +76,18 @@ on the pass by value or pass by reference thing but probably not as good as I co
 
 # Items for Extra Practice
   - Small Problems:Easy 5:#2 'After Midnight(Part1):Further Exploration #3
+
+# MISCILANEOUS
+- Accessing Array Elements:
+    Elements in an array can be retrieved using the Array#[] method. 
+    It can take a single integer argument (a numeric index), a pair of arguments (start and length) or a range. 
+    Negative indices start counting from the end, with -1 being the last element.
+
+- Swapping Ojbect Values -including array element values
+    If you want to swap two values you can use the syntax: 
+            a, b = b, a
+    The method below shows how to swap first and last characters of a word array
+    EX: def swap_first_last_characters(word)
+          word[0], word[-1] = word[-1], word[0]
+          word
+        end
