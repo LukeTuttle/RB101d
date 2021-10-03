@@ -342,10 +342,48 @@ def alphabetic_number_sort(arr)
   integers_out
 end
 
-test_arr = [(0..5), (10..19), (6..9)].map(&:to_a).flatten
-puts alphabetic_number_sort(test_arr)
-
 puts alphabetic_number_sort((0..19).to_a) == [
   8, 18, 11, 15, 5, 4, 14, 9, 19, 1, 7, 17,
   6, 16, 10, 13, 3, 12, 2, 0
 ]
+
+
+prob_sep 9
+# 9 'ddaaiillyy ddoouubblle'
+# Requirements:
+# - collapse consecutive characters into a single characters
+# Mental model:
+# - split up the string into characters.
+# - initialize an out_string
+# - loop through the array checking to see if the character following
+#     the current and the current character are the same
+#   - if TRUE then skip that iteration
+#   - if FALSE then push the character to the out_string
+# - RETURN the out_string
+# Algorithm:
+
+def crunch(str)
+  str = str.chars
+  str_out = []
+  counter = 0
+  loop do
+    str_out << str.first unless str.first == str_out.last
+    str.shift
+    counter += 1
+    break if str.size == 0
+  end
+  str_out.join
+end
+  # loop do
+  #   str_out << str[counter] unless str[counter] == str[counter + 1]
+  #   counter += 1
+  #   break if counter == str.length - 1
+  # end
+
+puts crunch('ddaaiillyy ddoouubbllee') == 'daily double'
+puts crunch('4444abcabccba') == '4abcabcba'
+puts crunch('ggggggggggggggg') == 'g'
+puts crunch('a') == 'a'
+puts crunch('') == ''
+
+puts "END -------------"
