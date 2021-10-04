@@ -56,6 +56,12 @@ problem 8 'Alphabetical Numbers'
     to the order resulting from sorting the keys. The key for each element is generated
     from the return value of having passed the element through the block. 
 
+problem 9 'ddaaiilly dddoouubbllee' 
+  It's not a bad idea to revisit this one. I had a hard time understanding why my while loop didn't work 
+  and I had trouble thinking through the indexing question in the 'further exploration' section
+
+problem 10 'Bannerizer'
+  I did well but the 'further exploration' on this problem would be a fun challenge.
 
 
 # Lesson 3

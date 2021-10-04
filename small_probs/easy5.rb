@@ -374,16 +374,42 @@ def crunch(str)
   end
   str_out.join
 end
-  # loop do
-  #   str_out << str[counter] unless str[counter] == str[counter + 1]
-  #   counter += 1
-  #   break if counter == str.length - 1
-  # end
 
 puts crunch('ddaaiillyy ddoouubbllee') == 'daily double'
 puts crunch('4444abcabccba') == '4abcabcba'
 puts crunch('ggggggggggggggg') == 'g'
 puts crunch('a') == 'a'
 puts crunch('') == ''
+
+prob_sep 10
+# 10 'Bannerizer'
+# Requirements:
+# - write a method taht will take a short line of text, and print it within a box
+# Mental model:
+# - add 1 space to the beggining and end of the string and store. Store the length
+#     of the string in a variable. SUBTASK: create a 'message' (i think) which is 5 lines long
+#     with the middle (i.e. 3rd) line reserved to interpolate the stored string.
+#     Finally, output the string.
+# - banner subtask:
+#   - the length of all 5 lines should be equal to the length of the stored string + 2.
+#   - the 1st and 5th lines should have a '+' as the first and last characters 
+#       with string.length # of - characters in between.
+#   - the 2nd-4th lines should start with '|' character and contain string.length
+#       # of space characters inbetween (expect the 3rd line bc its reserved for interp.)
+
+def print_in_box(str)
+  str = str.insert(0, ' ').insert(-1, ' ')
+  str_length = str.length
+  top_bottom = "-" * str_length
+  middle = " " * str_length
+
+  %Q(\
+  +#{top_bottom}+
+  |#{middle}|
+  |#{str}|
+  |#{middle}|
+  +#{top_bottom}+\
+  )
+end
 
 puts "END -------------"
