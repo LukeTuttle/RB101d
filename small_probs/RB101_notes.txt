@@ -63,6 +63,10 @@ problem 9 'ddaaiilly dddoouubbllee'
 problem 10 'Bannerizer'
   I did well but the 'further exploration' on this problem would be a fun challenge.
 
+## EASY 6
+problem 1
+  getting more familliar with escape character (particularly quoting) and forms of 
+  string delimiters (a few ex's:  %Q(), %q(), %()) would be a good idea.
 
 # Lesson 3
 ## Practice Problems: Medium2 
@@ -81,7 +85,8 @@ on the pass by value or pass by reference thing but probably not as good as I co
 
 
 # Items for Extra Practice
-  - Small Problems:Easy 5:#2 'After Midnight(Part1):Further Exploration #3
+  - Small Problems:Easy 5:#2 After Midnight(Part1):Further Exploration #3
+  - Small Problems:Easy 6:#10 'Right Triangles:Further Exploration #3
 
 # MISCILANEOUS
 - Accessing Array Elements:
@@ -98,4 +103,6 @@ on the pass by value or pass by reference thing but probably not as good as I co
           word
         end
 
-
+- Combining Arrays (Array#|)
+  a | b can be used to return the union (all a then all b) of the two arrays a and b and 
+  contains only unique values.
