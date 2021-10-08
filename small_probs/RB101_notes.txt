@@ -106,3 +106,29 @@ on the pass by value or pass by reference thing but probably not as good as I co
 - Combining Arrays (Array#|)
   a | b can be used to return the union (all a then all b) of the two arrays a and b and 
   contains only unique values.
+
+- << Operator 
+  [] << 2 << 3 << 4  => [2, 3, 4]
+
+
+Templates for written assesment (given to me by Sho Sugihara)
+  (make sure to change the language if using on written assesment so that you dont get accussed of plagarism)
+  These templates are helpful so that you don't have to think about the correct way to say or write things.
+
+
+
+  # Init variable ===================================
+
+  On `line 1` the local variable `a` is initialized to XX object `xx`.
+
+  # Init vaiable to a variable ===================================
+
+  On `line 2` the local variable `b` is initialized to XX object that the local variable `a` is referencing. Hence `a` and `b` are referencing the same object.
+
+
+  # Puts method ===================================
+
+  On `line xx` the `puts` method is called with object local variable `a` is referencing passed in as an argument and outputs `xx` which is the value of the object `a` is referencing and returns `nil`.
+
+
+    On `line xx` the `map` method is invoked on the object referenced by the local variable `xx`. From `lines xx ~ xx` the block defined by the 'do..end' statement is passed into the `map` method as an argument upon invocation. The `map` method iterates over the array object it is called on and executes the `block` for each element in the array. For every iteration the `map` method passes the current element as an argument to the block which is assigned to the block parameter ` n `. The `map` method will then return a new array object `xx` and output `xx`.  
