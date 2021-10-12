@@ -306,3 +306,235 @@ end
 puts staggered_case('I Love Launch School!') == 'I lOvE lAuNcH sChOoL!'
 puts staggered_case('ALL CAPS') == 'AlL cApS'
 puts staggered_case('ignore 77 the 444 numbers') == 'IgNoRe 77 ThE 444 nUmBeRs'
+
+
+prob_sep 7
+# 7 'Multiplicative Average'
+# Understand the problem
+#   Explicit requirements:
+#   - Input: array of integers
+#   - Output: float
+#   - multiply all numbers together, divide result by length of array,
+#       then prints result rounded to 3 decimal places. 
+#   Implicit requirements:
+#   - Additional considerations (about the problem, not the solution):
+#   Questions:
+# Examples and test cases:
+#  
+
+# Data structures:
+#  (listing out what you know about the way the data is structured can help you
+#   think about the algorithm--even if you've already listed those things previously)
+#   - working with an array which ends up in a float
+
+# Algorithm:
+#  (stay abstract/ high level; avoid implementation detail;
+#  these keep from getting boxed in a particular approach) 
+# - initialize `product` to 0
+# - iterate through array elements storing the sum in `product`
+# - divide product by length of array
+# - round to 3 decimal places 
+# - print rounded float
+# - 
+
+# Code implementation:
+#  (notes relevant to actual code; remember to code with intent--think about each line)
+
+def show_multiplicative_average(ary)
+  product = ary.inject(:*)
+  product = product.to_f / ary.size
+  
+
+  puts "The result is #{format('%.3f', product)}"
+end
+
+show_multiplicative_average([3, 5])                # => The result is 7.500
+show_multiplicative_average([6])                   # => The result is 6.000
+show_multiplicative_average([2, 5, 7, 11, 13, 17]) # => The result is 28361.667
+
+prob_sep 8
+# 8 'Multiply Lists'
+# Understand the problem
+#   Explicit requirements:
+#   - Input: two array arguments each of which contains a list of numbers
+#   - Output: a new array which contains the pairwise products of the two method args
+#   Implicit requirements:
+#   - Additional considerations (about the problem, not the solution):
+#   - can assume arg arrays are of same length
+#   - 
+#   Questions: waht is meant by 'numbers'...integers only? how to hand nil? 
+# Examples and test cases:
+#  multiply_list([3, 5, 7], [9, 10, 11]) == [27, 50, 77]
+
+# Data structures:
+#  (listing out what you know about the way the data is structured can help you
+#   think about the algorithm--even if you've already listed those things previously
+
+# Algorithm:
+#  (stay abstract/ high level; avoid implementation detail;
+#  these keep from getting boxed in a particular approach) 
+# - initialize `out_ary` to empty array
+# - for each element in one of the arrays
+#   - multiply that element by the element with the same index in the other array 
+#   - append the result to `out_ary` 
+# - return out_ary
+# END
+
+# Code implementation:
+#  (notes relevant to actual code; remember to code with intent--think about each line)
+
+
+def multiply_lists(ary1, ary2)
+  out_ary = []
+  ary1.each_with_index do |x, i|
+    out_ary << x * ary2[i]
+  end
+  out_ary
+end
+
+puts multiply_lists([3, 5, 7], [9, 10, 11]) == [27, 50, 77]
+
+
+def multiply_lists(ary1, ary2)
+  out_ary = []
+   ary1.zip(ary2) { |x1, x2| out_ary << x1 * x2 }
+  out_ary
+end
+
+p multiply_lists([3, 5, 7], [9, 10, 11]) 
+
+prob_sep 9
+# 9 'Multiply All Pairs'
+# Understand the problem
+#   Explicit requirements:
+#   - Input: two arrays each containing a list of numbers
+#   - Output: an new array containing the product of every pair of numbers that can be 
+#       formed between the elemetns of the two arrays. result should be sorted by increasing value
+#   Implicit requirements:
+#   - Additional considerations (about the problem, not the solution):
+#   Questions:
+#   - are all numbers integers? how to handle duplicate values in result array? 
+# Examples and test cases:
+#  multiply_all_pairs([2, 4], [4, 3, 1, 2]) == [2, 4, 4, 6, 8, 8, 12, 16]
+
+# Data structures:
+#  (listing out what you know about the way the data is structured can help you
+#   think about the algorithm--even if you've already listed those things previously
+
+# Algorithm:
+#  (stay abstract/ high level; avoid implementation detail;
+#  these keep from getting boxed in a particular approach) 
+# - initialize an empty `out_ary` variable to an empty array
+#  - initialize `outer_counter` to 0
+# - While `outer_counter` < ary1.size
+#   - initialize `inner_counter` to 0
+#   - While `inner_counter` < ary2.size
+#   - append result of ary1[outer_counter] * ary2[inner_counter] to out_ary 
+#   - increment inner_counter by 1 
+#   - END
+# - increment outer_counter by 1
+# - END
+# - Sort out_ary in ascending order
+#   - initialize an out_ary to an empty array
+#   - initialize cur_index to 0
+#   - while cur_index < ary.size - 1
+#     - set cur_num to ary[cur_index]
+#     - set compare_index to cur_index + 1
+#     while compare_index < ary.size
+#       if cur_num > ary[compare_index]
+#         ary[cur_index], ary[compare_index] = ary[compare_index], ary[cur_index]
+#         cur_num = ary[compare_index]
+#         compare_index += 1
+#         end
+#       end
+#   - cur_index += 1
+# - END
+# END
+
+
+# sort method mental model:
+# - for each element in the array, compare it to the later element
+# Code implementation:
+#  (notes relevant to actual code; remember to code with intent--think about each line)
+
+def my_sort(ary)
+  cur_index = 0
+  while cur_index < ary.size - 1
+    min = ary[cur_index]
+    min_index = cur_index
+    compare_index = cur_index + 1
+    while compare_index < ary.size
+      if min > ary[compare_index]
+        min = ary[compare_index]
+        min_index = compare_index
+      end
+      compare_index += 1
+    end
+    ary[cur_index], ary[min_index] = ary[min_index], ary[cur_index]
+    cur_index += 1
+  end
+  ary
+end
+
+p my_sort([4,2,3,1])
+
+def multiply_all_pairs(ary1, ary2)
+  out_ary = []
+  outer_counter = 0
+  
+  while outer_counter < ary1.size
+    inner_counter = 0
+    while inner_counter < ary2.size
+      out_ary << ary1[outer_counter] * ary2[inner_counter]
+      inner_counter += 1
+    end
+    outer_counter += 1
+  end
+  my_sort(out_ary)
+end
+
+puts multiply_all_pairs([2, 4], [4, 3, 1, 2]) == [2, 4, 4, 6, 8, 8, 12, 16]
+
+p multiply_all_pairs([2, 4], [4, 3, 1, 2])
+
+prob_sep 10
+# 10 'The End Is Near But Not Here'
+# Understand the problem
+#   Explicit requirements:
+#   - Input:
+#   - Output:
+#   Implicit requirements:
+#   - Additional considerations (about the problem, not the solution):
+#   - 
+#   - 
+#   Questions:
+# Examples and test cases:
+#  
+
+# Data structures:
+#  (listing out what you know about the way the data is structured can help you
+#   think about the algorithm--even if you've already listed those things previously
+
+# Algorithm:
+#  (stay abstract/ high level; avoid implementation detail;
+#  these keep from getting boxed in a particular approach) 
+# - 
+# - 
+# - 
+# - 
+# - 
+# - 
+# - 
+# - 
+
+# Code implementation:
+#  (notes relevant to actual code; remember to code with intent--think about each line)
+
+
+def penultimate(str)
+  str.split[-2]
+end
+
+puts penultimate('last word')
+puts penultimate('last word') == 'last'
+puts penultimate('Launch School is great!') == 'is'
