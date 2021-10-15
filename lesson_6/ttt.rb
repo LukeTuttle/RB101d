@@ -8,57 +8,138 @@
 # 8. Play again?
 # 9. If yes, go to #1
 # 10. Good bye!
-# require 'pry'
-# require 'pry-byebug'
 
-tracker = {}
+board = {}
 (1..9).each do |i|
-  tracker[i] = i.to_s
+  board[i] = i.to_s
 end
 
-disp_board = Proc.new {
+def disp_board(brd)
   puts %(
+
       |     |
-   #{tracker[1]}  |  #{tracker[2]}  |  #{tracker[3]}
+   #{brd[1]}  |  #{brd[2]}  |  #{brd[3]}
  _____|_____|_____
       |     |
-   #{tracker[4]}  |  #{tracker[5]}  |  #{tracker[6]}
+   #{brd[4]}  |  #{brd[5]}  |  #{brd[6]}
  _____|_____|_____
       |     |
-   #{tracker[7]}  |  #{tracker[8]}  |  #{tracker[9]}
-      |     |)
-}
-
-
-def open_msg(board)
-  puts " TIC - TAC - TOE"
-  board.call
-  puts ""
-  puts "Where would you like to make your first move?"
+   #{brd[7]}  |  #{brd[8]}  |  #{brd[9]}
+      |     |
+    )
 end
 
-def usrmv()
-  puts "Your turn. Input 1-9:"
-  gets.chomp.to_i
+def msg(str)
+  puts "=> #{str}"
+end
+
+def open_msg(brd)
+  puts " TIC - TAC - TOE"
+  disp_board(brd)
+  puts ""
+  msg "Where would you like to make your first move?"
+end
+
+def user_move(board)
+  usr_input = ''
+  loop do
+    msg "Your turn. Choose an available box 1-9:"
+    usr_input = gets.chomp.to_i
+    possible_moves = board.select { |_, value| value == ' ' }.keys
+
+    if possible_moves.include?(usr_input)
+      break
+    elsif (1..9).include?(usr_input)
+      msg "It looks like that spot is taken..."
+    else
+      msg "Invalid input! Enter any integer from 1 to 9."
+    end
+  end
+  board[usr_input] = 'X'
+end
+
+def computer_move(board)
+  possible_moves = board.select { |_, value| value == ' ' }.keys
+  computer_choice = possible_moves.sample
+  board[computer_choice] = 'O'
+  msg "Computer chose box #{computer_choice}!"
 end
 
 # wipes board
-def wipe_board(t)
+def wipe_board(brd)
   (1..9).each do |i|
-    t[i] = ' '
+    brd[i] = ' '
   end
 end
-## 1 Display Board
-open_msg disp_board
-wipe_board tracker
 
-tracker[usrmv] = 'X'
-puts tracker
-disp_board.call
+# test if board is full
+def board_full?(board)
+  board.values.all? { |value| value != ' ' }
+end
 
+def play_again?
+  usr_input = nil
+  loop do
+    msg "Want to play again? y/n: "
+    usr_input = gets.chomp.downcase
+    ['y', 'n'].include?(usr_input) ? break : msg('Invalid input!')
+  end
+  usr_input == 'y'
+end
 
+def win_msg(board)
+  winner = winner_check(board)
+  msg winner == 'player' ? 'You won!' : 'Shoot...computer won this time.'
+end
 
+SOLUTIONS = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
+            [[1, 4, 7], [2, 5, 8], [3, 6, 9]] + # cols
+            [[1, 5, 9], [3, 5, 7]]              # diagonals
 
+def winner_check(board)
+  winner = nil
+  SOLUTIONS.each do |line|
+    winner = 'player' if line.all? { |box| board[box] == 'X' }
+    winner = 'computer' if line.all? { |box| board[box] == 'O' }
+  end
+  winner
+end
 
+# MAIN PROGRAM
+open_msg board # board is initialized with boxes numbered
+loop do
+  wipe_board board
+  loop do
+    user_move board
+    disp_board board
 
-puts '---END---'
+    if !!winner_check(board)
+      win_msg board
+      break
+    end
+    if board_full?(board)
+      msg 'A tie!'
+      break
+    end
+
+    computer_move board
+    disp_board board
+
+    if !!winner_check(board)
+      win_msg board
+      break
+    end
+    if board_full?(board)
+      msg 'A tie!'
+      break
+    end
+  end
+  if play_again?
+    msg "Ok the board has been reset. Good luck!"
+    puts '--------------------------------------'
+    2.times { puts '' }
+  else
+    break
+  end
+end
+msg "Thanks for playing! Bye!"
