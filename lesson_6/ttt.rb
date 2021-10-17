@@ -40,10 +40,25 @@ def open_msg(brd)
   msg "Where would you like to make your first move?"
 end
 
+# write a method which will let use you specifiy the chars (a word) you want to use 
+# as the final delimiter in a sequence of objects. you should also be able to specify waht
+# delimeter to use up to that point. takes an array and outputs a string.
+
+def joiner(arr, delim, final_delim = 'or')
+  return arr[0].to_s if arr.size < 2
+  last = arr.pop.to_s
+  arr.join(delim) + delim + final_delim + ' ' + last
+end
+
+
+
+
+
 def user_move(board)
   usr_input = ''
   loop do
-    msg "Your turn. Choose an available box 1-9:"
+    msg "Choose a position to place a piece: " +
+        joiner(board.select { |_, value| value == ' ' }.keys, ', ') # provides available spots
     usr_input = gets.chomp.to_i
     possible_moves = board.select { |_, value| value == ' ' }.keys
 
