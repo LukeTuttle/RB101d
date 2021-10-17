@@ -9,25 +9,7 @@
 # 9. If yes, go to #1
 # 10. Good bye!
 
-board = {}
-(1..9).each do |i|
-  board[i] = i.to_s
-end
 
-def disp_board(brd)
-  puts %(
-
-      |     |
-   #{brd[1]}  |  #{brd[2]}  |  #{brd[3]}
- _____|_____|_____
-      |     |
-   #{brd[4]}  |  #{brd[5]}  |  #{brd[6]}
- _____|_____|_____
-      |     |
-   #{brd[7]}  |  #{brd[8]}  |  #{brd[9]}
-      |     |
-    )
-end
 
 def msg(str)
   puts "=> #{str}"
@@ -40,11 +22,7 @@ def open_msg(brd)
   msg "Where would you like to make your first move?"
 end
 
-# write a method which will let use you specifiy the chars (a word) you want to use 
-# as the final delimiter in a sequence of objects. you should also be able to specify waht
-# delimeter to use up to that point. takes an array and outputs a string.
-
-def joiner(arr, delim, final_delim = 'or')
+def joiner(arr, delim = ', ', final_delim = 'or')
   return arr[0].to_s if arr.size < 2
   return "#{arr[0]} #{final_delim} #{arr[1]}" if arr.size == 2
   last = arr.pop.to_s
@@ -77,14 +55,12 @@ def computer_move(board)
   msg "Computer chose box #{computer_choice}!"
 end
 
-# wipes board
 def wipe_board(brd)
   (1..9).each do |i|
     brd[i] = ' '
   end
 end
 
-# test if board is full
 def board_full?(board)
   board.values.all? { |value| value != ' ' }
 end
@@ -117,6 +93,33 @@ def winner_check(board)
   winner
 end
 
+def disp_board(brd)
+  puts %(
+
+      |     |
+   #{brd[1]}  |  #{brd[2]}  |  #{brd[3]}
+ _____|_____|_____
+      |     |
+   #{brd[4]}  |  #{brd[5]}  |  #{brd[6]}
+ _____|_____|_____
+      |     |
+   #{brd[7]}  |  #{brd[8]}  |  #{brd[9]}
+      |     |
+    )
+end
+
+board = {}
+(1..9).each do |i|
+  board[i] = i.to_s
+end
+
+def score_to_s(score)
+  score = score.to_a.map { |arr| joiner(arr, '', ':') }
+  score[0] + ', ' + score[1]
+end
+
+score = { player: 0, computer: 0 }
+
 # MAIN PROGRAM
 open_msg board # board is initialized with boxes numbered
 loop do
@@ -145,7 +148,16 @@ loop do
       msg 'A tie!'
       break
     end
+  end # single game loop ends here
+
+  if !!winner_check(board)
+    score[winner_check(board).to_sym] += 1
   end
+  if score.values.any? { |wins| wins == 5 }
+    msg "#{winner_check(board)} won the game! #{score_to_s(score)}."
+    break
+  end
+  msg "The score is now #{score_to_s score}. First one to score 5 wins."
   if play_again?
     msg "Ok the board has been reset. Good luck!"
     puts '--------------------------------------'
