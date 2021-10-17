@@ -9,8 +9,14 @@
 # 9. If yes, go to #1
 # 10. Good bye!
 
+require 'pry-byebug'
 
+# GLOBALS
+PLAYER_TOKEN = 'X'
+COMPUTER_TOKEN = 'O'
+NULL_TOKEN = ' '
 
+# MESSAGING METHODS
 def msg(str)
   puts "=> #{str}"
 end
@@ -29,6 +35,17 @@ def joiner(arr, delim = ', ', final_delim = 'or')
   arr.join(delim) + delim + final_delim + ' ' + last
 end
 
+# PLAYER AND COMPUTER MOVES & USER INPUTS
+def play_again?
+  usr_input = nil
+  loop do
+    msg "Want to play again? y/n: "
+    usr_input = gets.chomp.downcase
+    ['y', 'n'].include?(usr_input) ? break : msg('Invalid input!')
+  end
+  usr_input == 'y'
+end
+
 def user_move(board)
   usr_input = ''
   loop do
@@ -45,16 +62,56 @@ def user_move(board)
       msg "Invalid input! Enter any integer from 1 to 9."
     end
   end
-  board[usr_input] = 'X'
+  board[usr_input] = PLAYER_TOKEN
 end
 
 def computer_move(board)
-  possible_moves = board.select { |_, value| value == ' ' }.keys
-  computer_choice = possible_moves.sample
-  board[computer_choice] = 'O'
+  computer_choice = computer_ai(board)
+  board[computer_choice] = COMPUTER_TOKEN
   msg "Computer chose box #{computer_choice}!"
 end
 
+# COMPUTER AI
+# Defense: defends against immediate threat
+# mental model: 
+# - iteratively check through all willing solution to find if any of them have only
+#   1 instance of ' ' left. If so then it adds that move to a collection of moves
+#   to defend against immediate threats. this collection will be compared against 
+#   offensive moves to see if there are overlaps. for now just choose at random.
+# input: SOLUTIONS array (array of size 3 subarrays)
+# output: array hash keys (i.e. integers)
+# algo:
+# - iterate through all subarrays in SOLUTIONS checking for instances where there
+#    is exacty 1 ' ' value left in the corresponding positions in `board`
+#   - if such a instance exists, store that corresponding value in SOLULTIONS (i.e. integer)
+#     into an array of defensive moves.
+def computer_ai(board)
+  binding.pry
+  defensive_moves = defense(board)
+  if defensive_moves.size > 0
+    computer_choice = defensive_moves
+  else
+    possible_moves = board.select { |_, value| value == ' ' }.keys
+    computer_choice = possible_moves
+  end
+  computer_choice.sample
+end
+
+def defense(board)
+  defensive_moves = []
+  SOLUTIONS.each do |sub_arr|
+    count_player_tokens = 0
+    def_move = []
+    sub_arr.each do |num|
+      count_player_tokens += 1 if board[num] == PLAYER_TOKEN
+      def_move = num if board[num] == NULL_TOKEN
+    end
+    defensive_moves << def_move if count_player_tokens == 2 && def_move.size > 0
+  end
+  defensive_moves
+end
+
+# DEF, PRINTING, CHECKING, AND WIPING THE BOARD
 def wipe_board(brd)
   (1..9).each do |i|
     brd[i] = ' '
@@ -65,17 +122,6 @@ def board_full?(board)
   board.values.all? { |value| value != ' ' }
 end
 
-def play_again?
-  usr_input = nil
-  loop do
-    msg "Want to play again? y/n: "
-    usr_input = gets.chomp.downcase
-    ['y', 'n'].include?(usr_input) ? break : msg('Invalid input!')
-  end
-  usr_input == 'y'
-end
-
-# DEF, PRINTING, AND CHECKING THE BOARD
 def win_msg(board)
   winner = winner_check(board)
   msg winner == 'player' ? 'You won!' : 'Shoot...computer won this time.'
@@ -88,8 +134,8 @@ SOLUTIONS = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
 def winner_check(board)
   winner = nil
   SOLUTIONS.each do |line|
-    winner = 'player' if line.all? { |box| board[box] == 'X' }
-    winner = 'computer' if line.all? { |box| board[box] == 'O' }
+    winner = 'player' if line.all? { |box| board[box] == PLAYER_TOKEN }
+    winner = 'computer' if line.all? { |box| board[box] == COMPUTER_TOKEN }
   end
   winner
 end
