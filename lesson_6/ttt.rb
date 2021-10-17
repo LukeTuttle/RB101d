@@ -46,13 +46,10 @@ end
 
 def joiner(arr, delim, final_delim = 'or')
   return arr[0].to_s if arr.size < 2
+  return "#{arr[0]} #{final_delim} #{arr[1]}" if arr.size == 2
   last = arr.pop.to_s
   arr.join(delim) + delim + final_delim + ' ' + last
 end
-
-
-
-
 
 def user_move(board)
   usr_input = ''
