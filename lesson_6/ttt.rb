@@ -75,6 +75,7 @@ def play_again?
   usr_input == 'y'
 end
 
+# DEF, PRINTING, AND CHECKING THE BOARD
 def win_msg(board)
   winner = winner_check(board)
   msg winner == 'player' ? 'You won!' : 'Shoot...computer won this time.'
@@ -113,6 +114,7 @@ board = {}
   board[i] = i.to_s
 end
 
+# KEEPING SCORE
 def score_to_s(score)
   score = score.to_a.map { |arr| joiner(arr, '', ':') }
   score[0] + ', ' + score[1]
