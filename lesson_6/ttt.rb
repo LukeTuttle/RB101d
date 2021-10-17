@@ -71,44 +71,34 @@ def computer_move(board)
   msg "Computer chose box #{computer_choice}!"
 end
 
-# COMPUTER AI
-# Defense: defends against immediate threat
-# mental model: 
-# - iteratively check through all willing solution to find if any of them have only
-#   1 instance of ' ' left. If so then it adds that move to a collection of moves
-#   to defend against immediate threats. this collection will be compared against 
-#   offensive moves to see if there are overlaps. for now just choose at random.
-# input: SOLUTIONS array (array of size 3 subarrays)
-# output: array hash keys (i.e. integers)
-# algo:
-# - iterate through all subarrays in SOLUTIONS checking for instances where there
-#    is exacty 1 ' ' value left in the corresponding positions in `board`
-#   - if such a instance exists, store that corresponding value in SOLULTIONS (i.e. integer)
-#     into an array of defensive moves.
+# COMPUTER AI 
 def computer_ai(board)
-  binding.pry
-  defensive_moves = defense(board)
-  if defensive_moves.size > 0
-    computer_choice = defensive_moves
-  else
-    possible_moves = board.select { |_, value| value == ' ' }.keys
-    computer_choice = possible_moves
-  end
+  offensive_moves = strategic_moves(board, 'offense')
+  defensive_moves = strategic_moves(board, 'defense')
+  computer_choice =
+    if offensive_moves.size > 0
+      offensive_moves
+    elsif defensive_moves.size > 0
+      defensive_moves
+    elsif board[5] == NULL_TOKEN
+      [5]
+    else
+      board.select { |_, value| value == ' ' }.keys # any avail move
+    end
   computer_choice.sample
 end
 
-def defense(board)
-  defensive_moves = []
-  SOLUTIONS.each do |sub_arr|
-    count_player_tokens = 0
-    def_move = []
-    sub_arr.each do |num|
-      count_player_tokens += 1 if board[num] == PLAYER_TOKEN
-      def_move = num if board[num] == NULL_TOKEN
+def strategic_moves(board, strat = 'defense')
+  search_token = strat == 'offense' ? COMPUTER_TOKEN : PLAYER_TOKEN
+  suggested_moves = []
+  SOLUTIONS.each do |line|
+    if board.values_at(*line).count(search_token) == 2
+      suggested_moves << board.select do |k, v|
+        line.include?(k) && v == NULL_TOKEN
+      end.keys
     end
-    defensive_moves << def_move if count_player_tokens == 2 && def_move.size > 0
   end
-  defensive_moves
+  suggested_moves.flatten
 end
 
 # DEF, PRINTING, CHECKING, AND WIPING THE BOARD
