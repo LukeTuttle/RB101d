@@ -21,12 +21,11 @@ def msg(str)
   puts "=> #{str}"
 end
 
-def open_msg(brd)
-  puts " TIC - TAC - TOE"
-  disp_board(brd)
-  puts ""
-  msg "Where would you like to make your first move?"
-end
+# def open_msg(brd)
+#   puts " TIC - TAC - TOE"
+#   disp_board(brd)
+#   puts ""
+# end
 
 def joiner(arr, delim = ', ', final_delim = 'or')
   return arr[0].to_s if arr.size < 2
@@ -46,11 +45,47 @@ def play_again?
   usr_input == 'y'
 end
 
+def who_chooses
+  usr_input = nil
+  loop do
+    msg 'Do you want to chose who goes first? (y/n):'
+    usr_input = gets.chomp.downcase
+    ['n', 'y'].include?(usr_input) ? break : msg('Invalid input!')
+  end
+
+  if usr_input == 'n'
+    choice = ['computer', 'player'].sample
+    msg "The computer chose to go first" if choice == 'computer'
+    msg "The computer chose you to go first" if choice == 'player'
+    choice
+  else
+    who_first
+  end
+end
+
+def who_first
+  usr_input = nil
+  loop do
+    msg "Who do you want to go first? 'c' = computer, 'p' = player (i.e. you)"
+    usr_input = gets.chomp.downcase
+    ['c', 'p'].include?(usr_input) ? break : msg('Invalid input!')
+  end
+  usr_input == 'c' ? 'computer' : 'player'
+end
+
+def place_piece!(board, current_player)
+  current_player == 'player' ? user_move(board) : computer_move(board)
+end
+
+def alternate_player(current_player)
+  current_player == 'player' ? 'computer' : 'player'
+end
+
 def user_move(board)
   usr_input = ''
   loop do
     msg "Choose a position to place a piece: " +
-        joiner(board.select { |_, value| value == ' ' }.keys, ', ') # provides available spots
+        joiner(board.select { |_, value| value == ' ' }.keys, ', ') # open spots
     usr_input = gets.chomp.to_i
     possible_moves = board.select { |_, value| value == ' ' }.keys
 
@@ -71,7 +106,7 @@ def computer_move(board)
   msg "Computer chose box #{computer_choice}!"
 end
 
-# COMPUTER AI 
+# COMPUTER AI
 def computer_ai(board)
   offensive_moves = strategic_moves(board, 'offense')
   defensive_moves = strategic_moves(board, 'defense')
@@ -159,44 +194,32 @@ end
 score = { player: 0, computer: 0 }
 
 # MAIN PROGRAM
-open_msg board # board is initialized with boxes numbered
+puts " TIC - TAC - TOE"
+puts ""
 loop do
+  current_player = who_chooses
+  disp_board board
   wipe_board board
   loop do
-    user_move board
+    place_piece!(board, current_player)
     disp_board board
-
-    if !!winner_check(board)
-      win_msg board
-      break
-    end
-    if board_full?(board)
-      msg 'A tie!'
-      break
-    end
-
-    computer_move board
-    disp_board board
-
-    if !!winner_check(board)
-      win_msg board
-      break
-    end
-    if board_full?(board)
-      msg 'A tie!'
-      break
-    end
+    current_player = alternate_player(current_player)
+    break if !!winner_check(board) || board_full?(board)
   end # single game loop ends here
 
-  if !!winner_check(board)
+  if board_full?(board)
+    msg "It's tie!"
+  else # if someone won the (single) game
     score[winner_check(board).to_sym] += 1
+    if score.values.any? { |wins| wins == 5 }
+      msg "#{winner_check(board)} won the game! #{score_to_s(score)}."
+      break
+    end
   end
-  if score.values.any? { |wins| wins == 5 }
-    msg "#{winner_check(board)} won the game! #{score_to_s(score)}."
-    break
-  end
+  
   msg "The score is now #{score_to_s score}. First one to score 5 wins."
   if play_again?
+    wipe_board board
     msg "Ok the board has been reset. Good luck!"
     puts '--------------------------------------'
     2.times { puts '' }
