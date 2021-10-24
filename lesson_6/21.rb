@@ -37,10 +37,7 @@ def deal_cards!(dekk, n_cards)
   cards
 end
 
-def hit_me!(hand, dekk)
-  hand.push(deal_cards!(dekk, 1).flatten)
-end
-  
+
 # TURNS and LOOPING
 def hit?
   usr_input = nil
@@ -59,15 +56,15 @@ def play_again?
     usr_input = gets.chomp.downcase
     ['n', 'y'].include?(usr_input) ? break : msg('Invalid input!')
   end
-  usr_input == 'y'
+  usr_input.start_with?('y')
 end
   
 # CALC HAND VALUES and COMPUTER LOGIC
 
 def card_value(str, cards_value)
   if str == 'Ace'
-    cards_value > 10 ? 1 : 11
-  elsif str.include?('a-z') # face card
+    cards_value >= 11 ? 1 : 11
+  elsif ('A'..'Z').include?(str[0]) # face card
     10
   else
     str.to_i
@@ -98,130 +95,131 @@ def hand_value(cards) # taken from LS solution
 end
   
   
-  # MAIN PROGRAM
+# MAIN PROGRAM
+p_score = 0
+d_score = 0
+
+msg 'Welcome to 21! Good Luck!'
 loop do
-  busted = false
-  winner = nil
-  loop do
-    msg 'Welcome to 21! Good Luck!'
-    puts '========================='
-    2.times {puts ''}
-    msg "Dealing cards..."
-    puts ''
-    
-    sleep(1)
-    # deal cards
-    deck = get_deck
-    p_cards = deal_cards!(deck, 2)
-    d_cards = deal_cards!(deck, 2)
-    
-    p_cards_val = hand_value(p_cards)
-    d_cards_val = hand_value(d_cards)
-    # show cards  
-    print_hand(d_cards, 'd', d_cards_val)
-    puts ''
-    sleep(0.2)
-    print_hand(p_cards, 'p', p_cards_val)
-    puts ''
-    
-    # player turn
-    puts 'Player turn! =================='
-    loop do
-      if hit?
-        p_cards << deal_cards!(deck, 1)[0]
-        p_cards_val = hand_value(p_cards)
-        puts ''
-        sleep(0.2)
-        print_hand(p_cards, 'p', p_cards_val)
-        sleep(0.2)
-        if p_cards_val > 21
-          msg 'Bust!'
-          puts ''
-          busted = 'p'
-          break
-        elsif p_cards_val == 21
-          msg 'You have 21! You must stay.'
-          break
-        end
-      else
-        msg 'You chose to stay!'
-        break
-      end
-    end
-    puts ''
-    puts ''
-    sleep(0.2)
-    break if !!busted
+  puts '=========================\n\n'
+  msg "The score is: Dealer #{d_score} ; Player #{p_score}\n\n"
+  msg "Dealing cards...\n\n"
+  sleep(1)
 
-    puts 'Dealer turn! ================='
-    print_hand(d_cards, 'd', d_cards_val)
-    puts ''
-    binding.pry
-    while d_cards_val < 17
-      sleep(1)
-      d_cards << deal_cards!(deck, 1)[0]
-      d_cards_val = hand_value(d_cards)
-      msg 'Dealer chose to hit!'
-      sleep(1.5)
-      if d_cards_val > 21
-        puts ''
-        msg 'Bust!'
-        puts ''
-        sleep (0.2)
-        msg "Dealer's full hand was:"
-        puts card_to_s(d_cards[0]) + '  (hidden card)'
-        d_cards.slice(1..).each { |card| puts card_to_s(card)}
-        busted = 'd'
-        break
-      end
-      print_hand(d_cards, 'd', d_cards_val)
-      sleep(0.6)
-    end
-    break if !!busted
-    sleep(0.4)
-    msg 'Dealer chose to stay!'
-    puts ''
-    puts ''
-    sleep(0.7)
-    
-    
-    puts 'Compare cards ==================='
-    puts ''
-    sleep(0.2)
-    msg "Let's see what the dealer's full hand is:"
-    sleep(0.2)
-    puts card_to_s(d_cards[0]) + '  (hidden card)'
-    d_cards.slice(1..).each { |card| puts card_to_s(card)}
-    puts ''    
-    sleep(0.7)
-    
+  # deal cards
+  deck = get_deck
+  p_cards = deal_cards!(deck, 2)
+  d_cards = deal_cards!(deck, 2)
   
-    msg "Value of dealer hand: #{d_cards_val} ; Value of player hand: #{p_cards_val}"
-    puts ''
-    winner = 
-      if  d_cards_val > p_cards_val
-        'dealer'
-      elsif d_cards_val < p_cards_val
-        'player'
-      else
-        'tie'
+  p_cards_val = hand_value(p_cards)
+  d_cards_val = hand_value(d_cards)
+  # show cards  
+  print_hand(d_cards, 'd', d_cards_val)
+  
+  sleep(0.2)
+  print_hand(p_cards, 'p', p_cards_val)
+  puts ''
+  
+  # player turn
+  puts "Player turn! ==================\n\n"
+  loop do
+    if hit?
+      p_cards << deal_cards!(deck, 1)[0]
+      p_cards_val = hand_value(p_cards)
+      sleep(0.2)
+      if p_cards_val > 21
+        break
+      elsif p_cards_val == 21
+        msg 'You have 21! You must stay.'
+        break
       end
-    
-    break
-
+    else
+      msg 'You chose to stay!'
+      break
     end
-    
-  sleep(0.5)
-  # declare winner (utilize winner variable)
-  if !!busted
-    msg busted == 'p' ? 'DEALER WINS!' : 'PLAYER WINS!'
-  elsif winner == 'tie'
-    msg "It's a tie!"
-  else
-    msg "#{winner.upcase} WINS!"
+    print_hand(p_cards, 'p', p_cards_val)
+    sleep(0.2)
   end
 
+  if p_cards_val > 21 
+    msg "You busted! Dealer wins!"
+    p_score += 1 
+    if d_score == 5 || p_score == 5
+      break
+    elsif play_again?
+      next
+    else
+      break
+    end
+  end
+
+  puts "Dealer turn!=================\n\n"
+  loop do 
+    break if d_cards_val > 17
+    puts "reads less than 17" if d_cards_val < 17
+    puts ''
+    print_hand(d_cards, 'd', d_cards_val)
+    sleep(1)
+    
+    d_cards << deal_cards!(deck, 1)[0]
+    d_cards_val = hand_value(d_cards)
+    msg 'Dealer chose to hit!'
+    sleep(1.2)
+  end
+
+  if d_cards_val > 21
+    puts ''
+    msg "Dealer busted! You win!"
+    sleep (0.2)
+    msg "Dealer's full hand was:"
+    puts card_to_s(d_cards[0]) + '  (hidden card)'
+    d_cards.slice(1..).each { |card| puts card_to_s(card)}
+    p_score += 1 
+    if d_score == 5 || p_score == 5
+      break
+    elsif play_again?
+      next
+    else
+      break
+    end
+  else
+    msg 'Dealer chose to stay!'
+    print_hand(d_cards, 'd', d_cards_val)
+    sleep(0.6)
+  end
+  
+  puts "Compare cards ===================\n\n"
   sleep(0.2)
-  break unless play_again?
+  msg "Let's see what the dealer's full hand is:"
+  sleep(0.2)
+  puts card_to_s(d_cards[0]) + '  (hidden card)'
+  d_cards.slice(1..).each { |card| puts card_to_s(card)}
+  sleep(0.7)
+  puts ''    
+  
+  msg "Value of dealer hand: #{d_cards_val} ; Value of player hand: #{p_cards_val}\n\n"
+  sleep(0.5)
+
+  # declare winner (utilize winner variable)
+  if p_cards_val > d_cards_val
+    msg 'PLAYER WINS!'
+    p_score += 1
+  elsif d_cards_val > p_cards_val
+    msg 'DEALER WINS!'
+    d_score += 1
+  else
+    msg "It's a tie!"
+  end
+
+  msg "The score is now: Dealer #{d_score} ; Player #{p_score}"
+
+  sleep(0.2)
+  break if d_score == 5 || p_score == 5 || !play_again?
+ 
 end
 msg "Thanks for playing! Goodbye."
+
+# Todo: 
+# - check if program ends when a player reaches 5 wins. 
+# - I haven't figured out how to subtract the hidden card's value from hand value when displayin the dealer hand.
+# - bonus features 3 & 5 I havent even tried implementing yet. 
