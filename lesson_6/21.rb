@@ -1,10 +1,5 @@
 # A POKER GAME OF 21 (BLACK JACK)
-
-# GLOBALS
-CARD_VALS = {
-  '2' => 2, '3' => 3, '4' => 4, '5' => 5, '6' => 6, '7' => 7, '8' => 8, 
-  '9' => 9, '10' => 10, 'Jack' => 10, 'Queen' => 10, 'King' => 10
-}
+require 'pry-byebug'
 
 # OUTPUT to STDOUT (& helpers)
 def card_to_s(arr)
@@ -15,32 +10,30 @@ def msg(str)
   puts "=> " + str
 end
 
-def print_hand(arr, person = 'p') # p = player, d = dealer
+
+def print_hand(arr, person = 'p', cards_val = p_cards_val) # p = player, d = dealer
   if person == 'p'
     msg 'Player shows:'
     arr.each { |card| puts card_to_s(card) }
+    puts "Total: #{cards_val}"
   elsif person == 'd'
     msg 'Dealer shows:'
     arr.slice(1..).each { |card| puts card_to_s(card) }
-  end
+    hidden_val = card_value(arr[0][1], cards_val)
+    puts "Total: #{cards_val - hidden_val}" 
+    end
 end
 
 # CREATE and DEAL CARDS
 def get_deck
-  stack = []
   suits = ['Hearts', 'Clovers', 'Diamonds', 'Spades']
-  suits.each do |suit|
-    (2..10).each { |card| stack << [suit, card.to_s] }
-    ['Jack', 'Queen', 'King', 'Ace'].each { |card| stack << [suit, card] }
-  end
-  stack
+  values = ['Jack', 'Queen', 'King', 'Ace'].union(('2'..'10').to_a)
+  suits.product(values).shuffle
 end
   
 def deal_cards!(dekk, n_cards)
   cards = []
-  indexes = (0..dekk.size-1).to_a.sample(n_cards)
-  indexes.each { |i| cards << dekk[i] }
-  cards.each { |card| dekk.delete(card) }
+  n_cards.times { cards << dekk.pop }
   cards
 end
 
@@ -49,14 +42,14 @@ def hit_me!(hand, dekk)
 end
   
 # TURNS and LOOPING
-def hit_or_stay
+def hit?
   usr_input = nil
   msg "Do you want to 'hit' or 'stay'? (h/s):"
   loop do
     usr_input = gets.chomp.downcase
     ['h', 's'].include?(usr_input) ? break : msg('Invalid input!')
   end
-  usr_input
+  usr_input == 'h'
 end
 
 def play_again?
@@ -70,29 +63,39 @@ def play_again?
 end
   
 # CALC HAND VALUES and COMPUTER LOGIC
-def hand_value(hand)
-  total = 0
-  aces = 0
 
-  hand.each do |card|
-    if card[1] == 'Ace'
-      aces += 1 
-      next
-    end
-    total += CARD_VALS[card[1]]
+def card_value(str, cards_value)
+  if str == 'Ace'
+    cards_value > 10 ? 1 : 11
+  elsif str.include?('a-z') # face card
+    10
+  else
+    str.to_i
   end
-
-  aces.times do 
-    if total >= 10
-      total += 1
-    else
-      total += 11
-    end
-  end
-  
-  total
 end
 
+def hand_value(cards) # taken from LS solution
+  # cards = [['Hearts', '3'], ['Spades', 'Queen'], ... ]
+  values = cards.map { |card| card[1] }
+
+  sum = 0
+  values.each do |value|
+    if value == "Ace"
+      sum += 11
+    elsif value.to_i == 0 # J, Q, K
+      sum += 10
+    else
+      sum += value.to_i
+    end
+  end
+
+  # correct for Aces
+  values.select { |value| value == "Ace" }.count.times do
+    sum -= 10 if sum > 21
+  end
+
+  sum
+end
   
   
   # MAIN PROGRAM
@@ -111,27 +114,32 @@ loop do
     deck = get_deck
     p_cards = deal_cards!(deck, 2)
     d_cards = deal_cards!(deck, 2)
+    
+    p_cards_val = hand_value(p_cards)
+    d_cards_val = hand_value(d_cards)
     # show cards  
-    print_hand(d_cards, 'd')
+    print_hand(d_cards, 'd', d_cards_val)
     puts ''
     sleep(0.2)
-    print_hand(p_cards, 'p')
+    print_hand(p_cards, 'p', p_cards_val)
     puts ''
     
     # player turn
     puts 'Player turn! =================='
     loop do
-      if hit_or_stay == 'h'
-        hit_me!(p_cards, deck)
+      if hit?
+        p_cards << deal_cards!(deck, 1)[0]
+        p_cards_val = hand_value(p_cards)
         puts ''
         sleep(0.2)
-        print_hand(p_cards, 'p')
+        print_hand(p_cards, 'p', p_cards_val)
         sleep(0.2)
-        if hand_value(p_cards) > 21
+        if p_cards_val > 21
           msg 'Bust!'
+          puts ''
           busted = 'p'
           break
-        elsif hand_value(p_cards) == 21
+        elsif p_cards_val == 21
           msg 'You have 21! You must stay.'
           break
         end
@@ -146,16 +154,19 @@ loop do
     break if !!busted
 
     puts 'Dealer turn! ================='
-    print_hand(d_cards, 'd')
+    print_hand(d_cards, 'd', d_cards_val)
     puts ''
-    while hand_value(d_cards) < 17
+    binding.pry
+    while d_cards_val < 17
       sleep(1)
-      hit_me!(d_cards, deck)
+      d_cards << deal_cards!(deck, 1)[0]
+      d_cards_val = hand_value(d_cards)
       msg 'Dealer chose to hit!'
       sleep(1.5)
-      if hand_value(d_cards) > 21
+      if d_cards_val > 21
         puts ''
         msg 'Bust!'
+        puts ''
         sleep (0.2)
         msg "Dealer's full hand was:"
         puts card_to_s(d_cards[0]) + '  (hidden card)'
@@ -163,7 +174,7 @@ loop do
         busted = 'd'
         break
       end
-      print_hand(d_cards, 'd')
+      print_hand(d_cards, 'd', d_cards_val)
       sleep(0.6)
     end
     break if !!busted
@@ -171,9 +182,9 @@ loop do
     msg 'Dealer chose to stay!'
     puts ''
     puts ''
-    
-    
     sleep(0.7)
+    
+    
     puts 'Compare cards ==================='
     puts ''
     sleep(0.2)
@@ -182,16 +193,15 @@ loop do
     puts card_to_s(d_cards[0]) + '  (hidden card)'
     d_cards.slice(1..).each { |card| puts card_to_s(card)}
     puts ''    
-    
     sleep(0.7)
-    p_value = hand_value(p_cards)
-    d_value = hand_value(d_cards)
-    msg "Value of dealer hand: #{d_value} ; Value of player hand: #{p_value}"
+    
+  
+    msg "Value of dealer hand: #{d_cards_val} ; Value of player hand: #{p_cards_val}"
     puts ''
     winner = 
-      if d_value > p_value
+      if  d_cards_val > p_cards_val
         'dealer'
-      elsif p_value > d_value
+      elsif d_cards_val < p_cards_val
         'player'
       else
         'tie'
@@ -205,7 +215,7 @@ loop do
   # declare winner (utilize winner variable)
   if !!busted
     msg busted == 'p' ? 'DEALER WINS!' : 'PLAYER WINS!'
-  elsif winner != 'tie'
+  elsif winner == 'tie'
     msg "It's a tie!"
   else
     msg "#{winner.upcase} WINS!"
