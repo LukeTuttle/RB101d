@@ -511,39 +511,8 @@ puts array == %w(Alice Bonnie Kim Pete Rachel Sue Tyler)
 
 prob_sep 10
 # 10 'Sum Square - Square Sum'
-# Understand the problem
-#   Explicit requirements:
-#   - Input:
-#   - Output:
-#   - Additional considerations (about the problem, not the solution):
-#   - 
-#   - 
-#   Implicit requirements:
-#   Questions:
-
-# Examples and test cases:
-#  
-
-# Data structures:(stay abstract/ high level; avoid implementation detail; keeps from getting boxed in a particular approach)
-# - 
-# Algorithm:
-# - 
-# -  
-# - 
-# - 
-# - 
-# - 
-# - 
-# - 
-# - 
-
-# Code implementation:
-#  (notes relevant to actual code; remember to code with intent--think about each line)
-# 
-
 
 def sum_square_difference(int)
-  # binding.pry
   square_of_sums = ((int * (int + 1)) / 2)**2
 
   sum_of_squares = 0 
@@ -552,7 +521,6 @@ def sum_square_difference(int)
   end
 
   square_of_sums - sum_of_squares
-  
 end
 
 puts sum_square_difference(3) == 22
