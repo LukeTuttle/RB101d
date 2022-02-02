@@ -1,0 +1,134 @@
+RB 101 NOTES
+# Small problem set
+## EASY 1
+remember that using the ternary operator '?' isn't necessary if you're just returning true or false anyway. 
+String#chars() returns array of string characters. 
+someobject.map(&:some_method) is short hand for someobject.map { |x| x.some_method}
+PEDAC (note: you dont need to follow these in order, its just meant to help think about problem at different levels of abstraction and make it more chunked)
+P Process the problem (understand the problem)
+  identify expected input and output
+  make the requirements explicit
+  idenfity rules
+  mental model of the problem (optional)
+E Examples/Test Cases 
+  validate understanding of the problem
+D Data Structure
+  how we represent data that we will work with when convertint the input to output
+A Algorithm
+  steps for converting input to output
+C Code
+  implementation of Algorithm
+
+## EASY 2 
+in the Random#rand method it will output a number bewtween a min and max when supplied a range object
+Enumerator#inject is a useful function which comes with an accumulator object 'memo'. alias: 'reduce'
+
+send and public_send are methods that kind of work like do.call in R (very useful)
+
+## EASY 3 
+IMPORTANT*** I dont undestand how the counting method for String#count works. I've read the docs and stil don't get it. 
+
+## EASY 4
+problem 5 'Multiples of 3 and 5' ---I struggled with this one
+  if searching for multiples of a number within a range use something like the example below.
+    the important thing to remember is to use an iterator which takes care of not going past the max value on its own like Enumerator#upto
+  ex: (finds multiples of 3 or 5 given a max value and sums all multiples together)
+  def multisum(int)
+    (1..int).select { |x| x % 3 == 0 || x % 5 == 0 }.sum
+  end  
+
+problem 7 'Convert a string to a number'
+  A good way to create an integer from an array of digits is to multiply the previous integer by 10 then add current integer.
+  This shifts the digit place to the left each time 
+  ex code: 
+    value = 0
+    digits.each { |digit| value = 10 * value + digit }
+    value 
+  ex output (takes array [4,3,1]): 
+    10 * 0 + 4 -> 4
+    10 * 4 + 3 -> 43
+    10 * 43 + 1 -> 431
+
+## EASY 5
+problem 8 'Alphabetical Numbers'
+  ENUM$SORT_BY() (cap'd for emphasis): 
+    the method sort_by maps the elements to a set of keys and orders them according 
+    to the order resulting from sorting the keys. The key for each element is generated
+    from the return value of having passed the element through the block. 
+
+problem 9 'ddaaiilly dddoouubbllee' 
+  It's not a bad idea to revisit this one. I had a hard time understanding why my while loop didn't work 
+  and I had trouble thinking through the indexing question in the 'further exploration' section
+
+problem 10 'Bannerizer'
+  I did well but the 'further exploration' on this problem would be a fun challenge.
+
+## EASY 6
+problem 1
+  getting more familliar with escape character (particularly quoting) and forms of 
+  string delimiters (a few ex's:  %Q(), %q(), %()) would be a good idea.
+
+# Lesson 3
+## Practice Problems: Medium2 
+  - Q's 1 & 2: I dont understand these problems. I feel like I have a decent grasp
+on the pass by value or pass by reference thing but probably not as good as I could. 
+
+## Practice Problems: Hard1 
+  - Q1: if an uninitialized variable is called, ruby will usually throw an exception. 
+        However, when you initialize a local variable within an if block, even if
+        that if block doesn’t get executed, the local variable is initialized to nil
+
+  - Q2: the method 'clone' will create a copy of an object with the same value. 
+        This is helpful if you want to copy an objects value without modifying the object itself later on. 
+        If this doens't make sense then just read the exercize on LS site. 
+
+
+
+# Items for Extra Practice
+  - Small Problems:Easy 5:#2 After Midnight(Part1):Further Exploration #3
+  - Small Problems:Easy 6:#10 'Right Triangles:Further Exploration #3
+
+# MISCILANEOUS
+- Accessing Array Elements:
+    Elements in an array can be retrieved using the Array#[] method. 
+    It can take a single integer argument (a numeric index), a pair of arguments (start and length) or a range. 
+    Negative indices start counting from the end, with -1 being the last element.
+
+- Swapping Ojbect Values -including array element values
+    If you want to swap two values you can use the syntax: 
+            a, b = b, a
+    The method below shows how to swap first and last characters of a word array
+    EX: def swap_first_last_characters(word)
+          word[0], word[-1] = word[-1], word[0]
+          word
+        end
+
+- Combining Arrays (Array#|)
+  a | b can be used to return the union (all a then all b) of the two arrays a and b and 
+  contains only unique values.
+
+- << Operator 
+  [] << 2 << 3 << 4  => [2, 3, 4]
+
+
+Templates for written assesment (given to me by Sho Sugihara)
+  (make sure to change the language if using on written assesment so that you dont get accussed of plagarism)
+  These templates are helpful so that you don't have to think about the correct way to say or write things.
+
+
+
+  # Init variable ===================================
+
+  On `line 1` the local variable `a` is initialized to XX object `xx`.
+
+  # Init vaiable to a variable ===================================
+
+  On `line 2` the local variable `b` is initialized to XX object that the local variable `a` is referencing. Hence `a` and `b` are referencing the same object.
+
+
+  # Puts method ===================================
+
+  On `line xx` the `puts` method is called with object local variable `a` is referencing passed in as an argument and outputs `xx` which is the value of the object `a` is referencing and returns `nil`.
+
+
+    On `line xx` the `map` method is invoked on the object referenced by the local variable `xx`. From `lines xx ~ xx` the block defined by the 'do..end' statement is passed into the `map` method as an argument upon invocation. The `map` method iterates over the array object it is called on and executes the `block` for each element in the array. For every iteration the `map` method passes the current element as an argument to the block which is assigned to the block parameter ` n `. The `map` method will then return a new array object `xx` and output `xx`.  
