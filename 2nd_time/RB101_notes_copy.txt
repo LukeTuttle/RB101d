@@ -132,3 +132,8 @@ Templates for written assesment (given to me by Sho Sugihara)
 
 
     On `line xx` the `map` method is invoked on the object referenced by the local variable `xx`. From `lines xx ~ xx` the block defined by the 'do..end' statement is passed into the `map` method as an argument upon invocation. The `map` method iterates over the array object it is called on and executes the `block` for each element in the array. For every iteration the `map` method passes the current element as an argument to the block which is assigned to the block parameter ` n `. The `map` method will then return a new array object `xx` and output `xx`.  
+
+
+================ SECOND TIME THROUGH NOTES ==========================
+bonus exercises to come back to: medium1: 6
+

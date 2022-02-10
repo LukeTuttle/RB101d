@@ -58,6 +58,7 @@ build-iPhoneSimulator/
 ## Added by Luke
 # tempfiles for running code (code runner extension for vscode)
 *tempCodeRunnerFile.rb
+*tempCodeRunnerFile.ruby
 # scratch paper code
 *scratch.rb
 # tictactoe notes 

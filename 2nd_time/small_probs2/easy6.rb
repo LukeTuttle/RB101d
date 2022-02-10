@@ -540,4 +540,5 @@ end
 triangle(9)
 triangle(9, 'topright')
 triangle(9, 'topleft')
+binding.pry
 triangle(9, 'bottomleft')
