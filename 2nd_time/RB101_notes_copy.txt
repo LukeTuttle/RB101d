@@ -135,5 +135,5 @@ Templates for written assesment (given to me by Sho Sugihara)
 
 
 ================ SECOND TIME THROUGH NOTES ==========================
-bonus exercises to come back to: medium1: 6
-
+ medium1: 6 ; a good bonus exercisesto come back to
+Lesson 5: assignment 5 ;  some good practice problems for sorting, nested collections, and working with blocks
